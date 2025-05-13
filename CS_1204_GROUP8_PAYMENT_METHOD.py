@@ -50,6 +50,7 @@ class EWallet(PaymentMethod):
     def __init__(self, balance):
         super().__init__(0, "PHP", "EWT001")
         self.balance = balance
+        self.owner_name = owner_name
 
     def process_payment(self):
         if self.amount <= self.balance:
@@ -328,6 +329,8 @@ def main():
 
     elif choice == "2":
         print("📱 Welcome to the E-Wallet System!")
+
+        owner_name = input("Enter your name: ")
 
         wallet = EWallet(5000.00) 
 

@@ -83,8 +83,9 @@ Your digital wallet experience — fast, flexible, and user-friendly.
 
 ```python
 class EWallet(PaymentMethod):
-    def __init__(self, amount):
-        self.balance = amount
+    def __init__(self, balance):
+        super().__init__(0, "PHP", "EWT001")
+        self.balance = balance
 
     def cash_in(self, amount):
         if amount > 0:
@@ -120,6 +121,7 @@ An advanced card system with savings, credit, and password protection.
 ```python
 class ATMCard(PaymentMethod):
     def __init__(self, card_number, cvv, expiry_date, credit_limit, savings_balance, password):
+        super().__init__(0, "PHP", "ATM001")
         self.__card_number = card_number
         self.__cvv = cvv
         self.__expiry_date = expiry_date
@@ -180,6 +182,7 @@ Simple yet effective. Cash payments with receipt printing and change calculation
 ```python
 class Cash(PaymentMethod):
     def __init__(self, receipt_number, amount_due, amount_received):
+        super().__init__(amount_due, "PHP", receipt_number)
         self.__receipt_number = receipt_number
         self.__amount_due = amount_due
         self.__amount_received = amount_received

@@ -47,7 +47,7 @@ class BankBased(PaymentMethod):
 
 # EWallet
 class EWallet(PaymentMethod):
-    def __init__(self, balance):
+    def __init__(self, owner_name, balance):
         super().__init__(0, "PHP", "EWT001")
         self.balance = balance
         self.owner_name = owner_name
@@ -332,7 +332,7 @@ def main():
 
         owner_name = input("Enter your name: ")
 
-        wallet = EWallet(5000.00) 
+        wallet = EWallet(owner_name, 5000.00) 
 
         while True:
             print("\n====== E-WALLET MENU ======")

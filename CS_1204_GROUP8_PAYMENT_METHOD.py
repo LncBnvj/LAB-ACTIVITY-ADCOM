@@ -18,22 +18,21 @@ class PaymentMethod(ABC):
 
 # BankBased
 class BankBased(PaymentMethod):
-    def __init__(self, amount: float, currency: str, payment_id: str,
-                 bank_name: str, account_number: int, account_name: str):
+    def __init__(self, amount, currency, payment_id, bank_name, account_number, account_name):
         super().__init__(amount, currency, payment_id)
         self.bank_name = bank_name
         self.account_number = account_number
         self.account_name = account_name
         self.balance = 0.0
 
-    def withdraw(self, amount: float):
+    def withdraw(self, amount):
         if amount <= self.balance:
             self.balance -= amount
             print(f"Withdrawn {amount:,.2f} {self.currency}. New balance: {self.balance:,.2f} {self.currency}")
         else:
             print("Insufficient balance.")
 
-    def deposit(self, amount: float):
+    def deposit(self, amount):
         self.balance += amount
         print(f"Deposited {amount:,.2f} {self.currency}. New balance: {self.balance:,.2f} {self.currency}")
 
@@ -48,11 +47,12 @@ class BankBased(PaymentMethod):
 
 # EWallet
 class EWallet(PaymentMethod):
-    def __init__(self, amount):
-        self.balance = amount
+    def __init__(self, balance):
+        super().__init__(0, "PHP", "EWT001")
+        self.balance = balance
 
     def process_payment(self):
-        if self.balance >= self.amount:
+        if self.amount <= self.balance:
             self.balance -= self.amount
             print(f"✅ Payment of {self.amount:.2f} {self.currency} processed via E-Wallet.")
         else:
@@ -89,6 +89,7 @@ class EWallet(PaymentMethod):
 # ATMCard
 class ATMCard(PaymentMethod):
     def __init__(self, card_number, cvv, expiry_date, credit_limit, savings_balance, password):
+        super().__init__(0, "PHP", "ATM001")
         self.__card_number = card_number
         self.__cvv = cvv
         self.__expiry_date = expiry_date
@@ -173,6 +174,7 @@ class ATMCard(PaymentMethod):
 #CashPayment
 class Cash(PaymentMethod):
     def __init__(self, receipt_number, amount_due, amount_received):
+        super().__init__(amount_due, "PHP", receipt_number)
         self.__receipt_number = receipt_number
         self.__amount_due = amount_due
         self.__amount_received = amount_received

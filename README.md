@@ -83,9 +83,10 @@ Your digital wallet experience — fast, flexible, and user-friendly.
 
 ```python
 class EWallet(PaymentMethod):
-    def __init__(self, balance):
+    def __init__(self, owner_name, balance):
         super().__init__(0, "PHP", "EWT001")
         self.balance = balance
+        self.owner_name = owner_name
 
     def cash_in(self, amount):
         if amount > 0:

@@ -18,19 +18,18 @@ class PaymentMethod(ABC):
 
 # BankBased
 class BankBased(PaymentMethod):
-    def __init__(self, amount, currency, payment_id, bank_name, account_number, account_name):
+    def __init__(self, amount, currency, payment_id, bank_name, account_number, account_name, balance=0.0):
         super().__init__(amount, currency, payment_id)
         self.bank_name = bank_name
         self.account_number = account_number
         self.account_name = account_name
         self.balance = 0.0
 
-    def withdraw(self, amount):
+    def make_payment(self, amount):
         if amount <= self.balance:
             self.balance -= amount
-            print(f"Withdrawn {amount:,.2f} {self.currency}. New balance: {self.balance:,.2f} {self.currency}")
-        else:
-            print("Insufficient balance.")
+            return f"✅ Paid {amount:,.2f} {self.currency}. New balance: {self.balance:,.2f} {self.currency}"
+        return "❌ Payment failed: Insufficient balance"
 
     def deposit(self, amount):
         self.balance += amount
@@ -40,10 +39,7 @@ class BankBased(PaymentMethod):
         return f"Current balance: {self.balance:,.2f} {self.currency}"
 
     def process_payment(self):
-        if self.balance >= self.amount:
-            self.balance -= self.amount
-            return "✅ Payment processed via Bank-Based."
-        return "❌ Insufficient bank balance."
+        return self.make_payment(self.amount)
 
 # EWallet
 class EWallet(PaymentMethod):
@@ -304,7 +300,7 @@ def main():
         while True:
             print("\nChoose an option:")
             print("1. Deposit")
-            print("2. Withdraw")
+            print("2. Pay for Products")
             print("3. Check Balance")
             print("4. View Payment Details")
             print("5. Exit")
@@ -314,16 +310,26 @@ def main():
             if choice == "1":
                 deposit_amount = float(input("Enter amount to deposit: "))
                 account.deposit(deposit_amount)
+                continue
+
             elif choice == "2":
-                withdraw_amount = float(input("Enter amount to withdraw: "))
-                account.withdraw(withdraw_amount)
+                result = account.process_payment()
+                print(result)
+                if "✅" in result:
+                    break  # Exit if payment is successful
+
             elif choice == "3":
                 print(account.check_balance())
+                continue
+
             elif choice == "4":
                 print(account.payment_details())
+                continue
+
             elif choice == "5":
                 print("Thank you for using the system!")
                 break
+
             else:
                 print("Invalid choice. Please try again.")
 
